@@ -1,0 +1,78 @@
+{
+  "compilerOptions": {
+    // 指定 ECMAScript 目标版本：'ESNext' 表示使用最新的 ECMAScript 标准
+    "target": "ESNext",
+    // 模块解析策略：'ESNext' 表示使用最新的 ECMAScript 模块规范
+    "module": "ESNext",
+    // 模块解析方式：'bundler' 表示使用捆绑工具的解析策略，如 Vite 或 Webpack
+    "moduleResolution": "bundler",
+    // 启用所有严格类型检查选项：强制更严格的类型检查
+    "strict": false,
+    // JSX 代码保持不变：'preserve' 表示编译时不会转换 JSX 语法
+    "jsx": "preserve",
+    // 允许导入外部帮助函数：减少代码重复，提高效率
+    "importHelpers": true,
+    // 启用实验性装饰器：允许使用装饰器语法
+    "experimentalDecorators": true,
+    // 禁用严格函数类型检查：某些情况下可能需要禁用此检查
+    "strictFunctionTypes": false,
+    // 跳过库文件类型检查：提高编译速度，忽略 `node_modules` 中的类型检查
+    "skipLibCheck": true,
+    // 启用 ECMAScript 模块与 CommonJS 模块之间的互操作性
+    "esModuleInterop": true,
+    // 强制每个文件都被视为一个独立模块：用于提高构建工具的兼容性
+    "isolatedModules": true,
+    // 允许从模块中导入默认导出：与非 TypeScript 模块更好的兼容性
+    "allowSyntheticDefaultImports": true,
+    // 强制文件名一致性：确保文件引用时的大小写一致
+    "forceConsistentCasingInFileNames": true,
+    // 生成相应的 .map 文件：用于调试，提供源代码到编译后代码的映射
+    "sourceMap": true,
+    // 基本目录：用于解析非相对模块名的基准目录
+    "baseUrl": ".",
+    // 是否允许编译 JavaScript 文件：提高编译速度，仅处理 TypeScript 文件
+    "allowJs": false,
+    // 允许导入 JSON 模块：能够直接导入 JSON 文件
+    "resolveJsonModule": true,
+    // 指定要包含的库文件：如最新的 ECMAScript 标准和 DOM API
+    "incremental": true, // 启用增量编译
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    // 路径映射：配置模块导入的快捷方式
+    "paths": {
+      // 使用 @/ 代替 src/ 路径
+      "@/*": [
+        "src/*"
+      ],
+      // 使用 @build/ 代替 build/ 路径
+      "@build/*": [
+        "build/*"
+      ]
+    },
+    // 指定需要包含的类型声明文件：提供全局类型定义
+    "types": [
+      "node",
+      "vite/client",
+      "element-plus/global",
+      "@pureadmin/table/volar",
+      "@pureadmin/descriptions/volar"
+    ]
+  },
+  "include": [
+    // 包含的文件和目录模式：编译时包含这些文件
+    "mock/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/*.d.ts",
+    "vite.config.ts"
+  ],
+  "exclude": [
+    // 排除的文件和目录模式：编译时忽略这些文件
+    "dist",
+    "**/*.js",
+    "node_modules"
+  ]
+}

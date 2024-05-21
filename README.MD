@@ -1,6 +1,8 @@
 <h1>vue-ease-admin</h1>
 
-![GitHub license](https://img.shields.io/github/license/pure-admin/vue-pure-admin?style=flat)forks](https://img.shields.io/github/forks/pure-admin/vue-pure-admin?style=flat)
+![github license](https://camo.githubusercontent.com/500f3242c4f363f0ac95577b53e08db971133e39b8d8dda310bfc4505bdd43e6/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f707572652d61646d696e2f7675652d707572652d61646d696e3f7374796c653d666c6174)
+
+
 
 ## 简介
 

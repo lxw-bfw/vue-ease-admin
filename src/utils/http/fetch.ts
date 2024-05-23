@@ -128,6 +128,7 @@ class FetchHttp {
         if (expired) {
           // 避免多个接口并行多次刷新token
           if (!FetchHttp.isRefreshing) {
+            let saveToken = "";
             FetchHttp.isRefreshing = true;
             // token过期刷新
             try {
@@ -135,21 +136,24 @@ class FetchHttp {
                 refreshToken: data.refreshToken
               });
               const token = res.data.accessToken;
+              saveToken = res.data.accessToken;
               fetchOpt.options.headers["Authorization"] = formatToken(token);
-              FetchHttp.requests.forEach(cb => cb(token));
-              FetchHttp.requests = [];
+              return Promise.resolve(fetchOpt);
             } finally {
+              FetchHttp.requests.forEach(cb => cb(saveToken));
+              FetchHttp.requests = [];
               FetchHttp.isRefreshing = false;
             }
+          } else {
+            // 内部暂存配置信息，此时下面方法不会立马进行resolve，也就是当前所有走到这边的接口请求都会在这里进行等待状态
+            // 等到token刷新，也就是上面FetchHttp.requests.forEach(cb => cb(token));，传入正确的token，resove返回，此时这里的
+            // 等待状态才会结束,简单说就是 await 后面跟着一个返回Promise对象的方法的时候，如果它这个方法内部没有进行任何的resolve和reject
+            // 那么理论上走到await这里之后就会一直阻塞于此
+            // 也就是可以借此来实现对调用的接口暂存，挂起，等到某个时机，通过回调函数的形式触发resolve
+            await FetchHttp.retryOriginalRequest(fetchOpt);
+            console.log("开始执行暂存接口");
+            return Promise.resolve(fetchOpt);
           }
-          // 内部暂存配置信息，此时下面方法不会立马进行resolve，也就是当前所有走到这边的接口请求都会在这里进行等待状态
-          // 等到token刷新，也就是上面FetchHttp.requests.forEach(cb => cb(token));，传入正确的token，resove返回，此时这里的
-          // 等待状态才会结束,简单说就是 await 后面跟着一个返回Promise对象的方法的时候，如果它这个方法内部没有进行任何的resolve和reject
-          // 那么理论上走到await这里之后就会一直阻塞于此
-          // 也就是可以借此来实现所谓的调用的接口暂存，挂起，等到某个时机，通过回调函数的形式触发立马的resolve
-
-          await FetchHttp.retryOriginalRequest(fetchOpt);
-          return Promise.resolve(fetchOpt);
         } else {
           fetchOpt.options.headers["Authorization"] = formatToken(
             data.accessToken

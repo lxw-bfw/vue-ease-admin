@@ -98,7 +98,28 @@ export function resetRouter() {
       );
     }
   });
+  // 动态路由变更前保持同步
+  router.options.routes[0].children = router.options.routes[0].children.filter(
+    item => !item.meta.backstage
+  );
   usePermissionStoreHook().clearAllCachePage();
+}
+/** 清除根路径之外的动态路由 */
+export function resetDynamicRouter() {
+  router.getRoutes().forEach(route => {
+    const { name, meta } = route;
+    if (name && router.hasRoute(name) && meta?.backstage) {
+      router.removeRoute(name);
+      router.options.routes = formatTwoStageRoutes(
+        formatFlatteningRoutes(
+          buildHierarchyTree(ascending(routes.flat(Infinity)))
+        )
+      );
+    }
+  });
+  router.options.routes[0].children = router.options.routes[0].children.filter(
+    item => !item.meta.backstage
+  );
 }
 
 /** 路由白名单 */

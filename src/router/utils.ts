@@ -169,13 +169,15 @@ function handleAsyncRoutes(routeList) {
           // 最终路由进行升序
           ascending(router.options.routes[0].children);
           if (!router.hasRoute(v?.name)) router.addRoute(v);
-          const flattenRouters: any = router
-            .getRoutes()
-            .find(n => n.path === "/");
-          router.addRoute(flattenRouters);
         }
       }
     );
+    // 最终同步了动态路由的router.options.routes[0].children
+    // 继续同步path为/的根路由（也就是Layout层，它嵌套了需要包裹layout的动态路由和静态路由）
+    const flattenRouters: any = router.getRoutes().find(n => n.path === "/");
+    flattenRouters.children = router.options.routes[0].children;
+    router.addRoute(flattenRouters);
+
     usePermissionStoreHook().handleWholeMenus(routeList);
   }
   if (!useMultiTagsStoreHook().getMultiTagsCache) {
